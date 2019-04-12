@@ -40,17 +40,15 @@ class ColourCollectionReusableView: UICollectionReusableView {
     }
     
     func swapInNew(colors:[UIColor]){
-        materialSwapArray = (blenderSphereNode.geometry?.materials)!
-        let colorMaterialsArray = convert(colorArray: colors, toMaterial: imageMaterial)
-        //print(colorMaterialsArray)
-        for color in colorMaterialsArray {
-            print("Colour being applied is: \(color)")
-//            blenderSphereNode.geometry?.firstMaterial?.diffuse.contents = color
-            materialSwapArray[indexCounter] = color
-            //blenderSphereNode.geometry?.replaceMaterial(at: indexCounter, with: color)
-            indexCounter += 1
+        let colorMaterialsArray = colors.map { i -> SCNMaterial in
+            let imageMaterial = SCNMaterial()
+            imageMaterial.diffuse.contents = i
+            return imageMaterial
         }
-        blenderSphereNode.geometry?.materials = materialSwapArray
+        for (idx, color) in colorMaterialsArray.enumerated() {
+            print("Colour being applied is: \(color)")
+            blenderSphereNode.geometry?.replaceMaterial(at: idx, with: color)
+        }
     }
     
     func convert(colorArray: [UIColor], toMaterial: SCNMaterial) -> [SCNMaterial] {
